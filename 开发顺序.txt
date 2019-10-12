@@ -1,0 +1,39 @@
+1.在命令行工具中输入vue init webpack reader，使用vue脚手架工具生成项目的模板。
+2.epubjs是阅读器引擎，用npm install epubjs --save下载。
+3.npm install node-sass sass-loader --save-dev添加sass的模块，-dev会把引用添加到package.json的
+  devDependencies里，如果不加就添加到dependencies里。
+4.在iconfont中找到适合的图标添加进工程
+5.配置静态资源服务器。
+6.viewport用来设置用户在手机上面的可视区域，vue脚手架的默认设置是width=device-width：指定viewport宽度为设备宽度，
+  initialscale=1.0：指定默认缩放比例为1：1。（问题：屏幕缩放比例没有固定，操作容易误触导致浏览器放大或者缩小）。
+  通过maximum-scale和minimum-scale限定屏幕缩放比例为1：1，通过user-scale限制用户对屏幕进行缩放。在index.html的meta
+  中设置。
+7.rem配置。rem的值相当于根元素font-size的倍数。DOMContentLoaded事件动态设置根元素font-size。
+  html.style.fontSize = window.innerWidth/10 + 'px' 。
+8.引入reset.scss和global.scss，实现px2rem方法。reset.css可以消除不同浏览器默认样式的不一致性。global.css规定
+了整个站点的公共样式、公共方法、公共参数。引入scss时报错解决办法，https://blog.csdn.net/qq_43504375/article/details/100586410。
+9.epubjs的核心工作原理。epub电子书—————epubjs————>Book对象（解析电子书）
+  Book对象（解析电子书）——————renderTo方法——————>Rendition对象（负责电子书渲染）——————display方法——————>Theme对象
+  Book对象（解析电子书）————————————>Location对象（负责电子书定位，拖动进度条进行定位）
+  Book对象（解析电子书）————————————>Navigation对象（展示电子书目录）
+10.src下创建EBook.vue，并配置该页面的路由。
+11.使用epubjs解析epub电子书获得Book对象，Book.container.packagePath中的container.opf会被解析
+  成一个package对象，package.metadata是出版信息，package.manifest.ncxPath是目录的路径，
+  manifest.spine是阅读顺序。
+12.eslint禁用规则。在script标签下添加/* eslint-disable 规则 */即可禁用规则（只在当前文件），例如：
+  /* eslint-disable space-before-function-paren */。也可以选择去eslint的配置文件修改，打开
+  .eslintrc.js文件，在rules下添加自己的规则，'space-before-function-paren': 'off'，重新run项目即可。
+13.翻页功能。在reader上面添加一个遮罩层，分为左中右三块，点击左右两块实现前后翻页。
+14.标题栏菜单栏。分别在页面上部跟下部添加标题栏跟菜单栏，并且把图标添加进去，调整样式。给遮罩层中间那一块添加一个点击事件，
+  用来控制标题栏跟菜单栏的显示与隐藏，并添加过渡动画。
+  使用v-show显示隐藏元素的时候会触发过渡动画，transition需要指定name，并包裹一个包含v-show的div。
+  vue会给transition包裹的div动态添加class，一共6种。
+  显示：v-enter——————v-enter-active——————v-enter-to
+  隐藏：v-leave——————v-leave-active——————v-leave-to
+15.字号功能设置。先把标题跟菜单组件化，在菜单组件里添加字号设置功能。点击菜单栏的调节字体大小图标，弹出新的字体设置模块进行
+  字体设置。期间通过在父组件中的ref（被用来给元素或子组件注册引用信息），$refs（一个对象，持有注册过 ref 特性 的所有 DOM 
+  元素和组件实例）进行调用子组件的方法。通过样式绑定给预览的小字体设置字体大小（父组件传递到子组件），改变字体大小的时候，
+  在子组件中通过$emit触发父组件的方法对字体大小进行切换。父组件的方法中使用theme对象切换字体大小。
+16.主题功能设置，选择背景后会改变字体跟背景颜色，通过theme对象来实现。
+17.进度条功能。通过epubjs的location对象来实现。
+18.目录功能。新增一个Content组件，要先在父组件获取navigation对象并传递到Content组件之中进行操作。
