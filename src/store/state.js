@@ -1,3 +1,4 @@
 export default {
-  fileName: ''
+  fileName: '',
+  menuVisible: false
 }

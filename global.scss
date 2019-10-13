@@ -1,5 +1,22 @@
-@import './reset.scss';
-@import './mixin.scss';
+@import 'reset';
+
+// 1rem = fontSize px
+// 1px = (1 / fontSize)rem
+$fontSize: 37.5;
+@function px2rem($px) {
+  @return ($px / $fontSize) + rem;
+}
+
+@mixin center() {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  color: #333;
+  font-size: px2rem(20);
+}
 
 .slide-down-enter, .slide-down-leave-to {
   transform: translate3d(0, -100%, 0)
