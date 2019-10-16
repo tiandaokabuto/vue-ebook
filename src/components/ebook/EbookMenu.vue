@@ -1,7 +1,7 @@
 <template>
   <div class="menu-bar">
     <transition name="slide-up">
-      <div class="menu-wrapper" :class="{'hide-box-shadow':!menuVisible}" v-show="menuVisible">
+      <div class="menu-wrapper" :class="{'hide-box-shadow':!menuVisible || settingVisible >= 0}" v-show="menuVisible">
         <div class="icon-wrapper">
           <span class="icon-menu" @click="showSetting(3)"></span>
         </div>
@@ -16,80 +16,34 @@
         </div>
       </div>
     </transition>
-    <transition name="slide-up">
-      <div class="setting-wrapper" v-show="ifSettingShow">
-        <div class="setting-font-size" v-if="showTag === 0">
-          <div class="preview" :style="{fontSize: fontSizeList[0].fontSize + 'px'}">A</div>
-          <div class="select">
-            <div
-              class="select-wrapper"
-              v-for="(item, index) in fontSizeList"
-              :key="index"
-              @click="setFontSize(item.fontSize)"
-            >
-              <div class="line"></div>
-              <div class="point-wrapper">
-                <div class="point" v-show="defaultFontSize === item.fontSize">
-                  <div class="small-point"></div>
-                </div>
-              </div>
-              <div class="line"></div>
-            </div>
-          </div>
-          <div
-            class="preview"
-            :style="{fontSize: fontSizeList[fontSizeList.length - 1].fontSize + 'px'}"
-          >A</div>
-        </div>
-        <div class="setting-theme" v-else-if="showTag === 1">
-          <div
-            class="setting-theme-item"
-            v-for="(item, index) in themeList"
-            :key="index"
-            @click="setTheme(index)"
-          >
-            <div
-              class="preview"
-              :style="{background: item.style.body.background}"
-              :class="{'no-border': item.style.body.background !== '#fff'}"
-            ></div>
-            <div class="text" :class="{'selected': index === defaultTheme}">{{item.name}}</div>
-          </div>
-        </div>
-        <div class="setting-progress" v-else-if="showTag === 2">
-          <div class="progress-wrapper">
-            <input
-              class="progress"
-              type="range"
-              max="100"
-              min="0"
-              step="1"
-              @change="onProgressChange($event.target.value)"
-              @input="onProgressInput($event.target.value)"
-              :value="progress"
-              :disabled="!bookAvailable"
-              ref="progress"
-            />
-          </div>
-          <div class="text-wrapper">
-            <span>{{bookAvailable ? progress + '%' : '加载中...'}}</span>
-          </div>
-        </div>
-      </div>
-    </transition>
+    <setting-font></setting-font>
+    <setting-font-family></setting-font-family>
+    <setting-theme></setting-theme>
+    <setting-progress></setting-progress>
   </div>
 </template>
 
 <script>
-import ebookMixin from '../../util/mixin';
+import ebookMixin from '../../util/mixin'
+import SettingFont from './EbookSettingFont'
+import SettingFontFamily from './EbookSettingFontFamily'
+import SettingTheme from './EbookSettingTheme'
+import SettingProgress from './EbookSettingProgress'
 export default {
   data () {
     return {}
   },
   mixins: [ebookMixin],
-  components: {},
+  components: {
+    SettingFont,
+    SettingFontFamily,
+    SettingTheme,
+    SettingProgress
+  },
   methods: {
-    showSetting (key) {}
+    showSetting (key) {
+      this.setSettingVisible(key)
+    }
   }
 }
 </script>
