@@ -57,3 +57,7 @@ export function themeList (vue) {
     }
   ]
 }
+
+export function flatten (arr) {
+  return [].concat(...arr.map(item => [].concat(item, ...flatten(item.subitems))))
+}

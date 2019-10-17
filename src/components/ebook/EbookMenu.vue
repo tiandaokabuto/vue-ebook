@@ -20,6 +20,7 @@
     <setting-font-family></setting-font-family>
     <setting-theme></setting-theme>
     <setting-progress></setting-progress>
+    <slide></slide>
   </div>
 </template>
 
@@ -29,6 +30,7 @@ import SettingFont from './EbookSettingFont'
 import SettingFontFamily from './EbookSettingFontFamily'
 import SettingTheme from './EbookSettingTheme'
 import SettingProgress from './EbookSettingProgress'
+import Slide from './EbookSlide'
 export default {
   data () {
     return {}
@@ -38,7 +40,8 @@ export default {
     SettingFont,
     SettingFontFamily,
     SettingTheme,
-    SettingProgress
+    SettingProgress,
+    Slide
   },
   methods: {
     showSetting (key) {

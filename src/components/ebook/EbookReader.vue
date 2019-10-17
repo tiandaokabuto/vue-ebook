@@ -7,6 +7,7 @@
 <script>
 import Epub from 'epubjs'
 import ebookMixin from '../../util/mixin'
+import { flatten } from '../../util/book'
 import {
   getFontFamily,
   saveFontFamily,
@@ -30,8 +31,9 @@ export default {
       this.setCurrentBook(this.ebook)
       this.initRendition()
       this.initGesture()
+      this.parseBook()
       this.ebook.ready.then(() => {
-        return this.ebook.locations.generate(500).then(locations => {
+        return this.ebook.locations.generate(750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16)).then(locations => {
           this.setBookAvailable(true)
           this.refreshLocation()
         })
@@ -51,8 +53,8 @@ export default {
         this.initFontSize()
         this.initTheme()
       })
+      // 载入字体库
       this.rendition.hooks.content.register(contents => {
-        // 载入字体库
         contents.addStylesheet(
           `${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`
         )
@@ -65,6 +67,30 @@ export default {
         contents.addStylesheet(
           `${process.env.VUE_APP_RES_URL}/fonts/tangerine.css`
         )
+      })
+    },
+    parseBook () {
+      this.ebook.loaded.cover.then(cover => { // 获取电子书的封面
+        this.ebook.archive.createUrl(cover).then(url => {
+          this.setCover(url)
+        })
+      })
+      this.ebook.loaded.metadata.then(metadata => { // 获取电子书的书名和作者
+        this.setMetadata(metadata)
+      })
+      this.ebook.loaded.navigation.then(nav => { // 获取电子书的目录
+        // 目录是树状结构，要把它转换为一维数组的结构
+        // console.log([].concat(...[1, 2, 3])) 实现思路
+        const navItem = flatten(nav.toc)
+        function find (item, level = 0) {
+          return !item.parent ? level : find(navItem.filter(parentItem =>
+            parentItem.id === item.parent)[0], ++level)
+        }
+        navItem.forEach(item => {
+          item.level = find(item)
+        })
+        console.log(navItem)
+        this.setNavigation(navItem)
       })
     },
     initGesture () {
@@ -140,11 +166,6 @@ export default {
     },
     showTitleAndMenu () {
       this.setMenuVisible(!this.menuVisible)
-      this.setSettingVisible(-1)
-      this.setFontFamilyVisible(false)
-    },
-    hideTitleAndMenu () {
-      this.setMenuVisible(false)
       this.setSettingVisible(-1)
       this.setFontFamilyVisible(false)
     }

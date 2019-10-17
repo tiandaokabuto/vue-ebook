@@ -38,23 +38,25 @@
 <script>
 /* eslint-disable eslint(vue/return-in-computed-property) */
 import ebookMixin from '../../util/mixin'
-import { getReadTime } from '../../util/localStorage'
 export default {
   data () {
     return {}
   },
   computed: {
     getSectionName () {
-      if (this.section) {
-        const sectionInfo = this.currentBook.section(this.section)
-        if (sectionInfo && sectionInfo.href) {
-          return this.currentBook.navigation.get(sectionInfo.href).label
-        } else {
-          return ''
-        }
-      } else {
-        return ''
-      }
+      // if (this.section) {
+      //   const sectionInfo = this.currentBook.section(this.section)
+      //   if (sectionInfo && sectionInfo.href && this.currentBook && this.currentBook.navigation) {
+      //     console.log(sectionInfo.href)
+      //     console.log(this.currentBook.navigation.get(sectionInfo.href))
+      //     return this.currentBook.navigation.get(sectionInfo.href).label
+      //   } else {
+      //     return ''
+      //   }
+      // } else {
+      //   return ''
+      // }
+      return this.section ? this.navigation[this.section].label : ''
     },
     getReadTime () {
       return this.$t('book.haveRead').replace('$1', this.getReadTimeByMinute(this.fileName))
@@ -62,14 +64,6 @@ export default {
   },
   mixins: [ebookMixin],
   methods: {
-    getReadTimeByMinute () {
-      const readTime = getReadTime(this.fileName)
-      if (!readTime) {
-        return 0
-      } else {
-        return Math.ceil(readTime / 60)
-      }
-    },
     onProgressChange (progress) { // 进度条发生变化时渲染
       this.setProgress(progress).then(() => {
         this.displayProgress()
