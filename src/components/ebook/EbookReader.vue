@@ -1,6 +1,7 @@
 <template>
   <div class="ebook-reader">
     <div id="reader"></div>
+    <div id="mask" @click="onMaskClick" @touchmove="move" @touchend="moveEnd" ref="mask"></div>
   </div>
 </template>
 
@@ -19,7 +20,9 @@ import {
 } from '../../util/localStorage'
 export default {
   data () {
-    return {}
+    return {
+      showingMask: true
+    }
   },
   mixins: [ebookMixin], // mixin进行复用
   components: {},
@@ -30,7 +33,7 @@ export default {
       this.ebook = new Epub(url)
       this.setCurrentBook(this.ebook)
       this.initRendition()
-      this.initGesture()
+      // this.initGesture()
       this.parseBook()
       this.ebook.ready.then(() => {
         return this.ebook.locations.generate(750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16)).then(locations => {
@@ -168,6 +171,32 @@ export default {
       this.setMenuVisible(!this.menuVisible)
       this.setSettingVisible(-1)
       this.setFontFamilyVisible(false)
+    },
+    onMaskClick (e) {
+      const x = e.offsetX
+      const width = window.innerWidth
+      if (x > 0 && x < width * 0.3) {
+        this.prevPage()
+      } else if (x > width * 0.7) {
+        this.nextPage()
+      } else {
+        this.showTitleAndMenu()
+      }
+    },
+    move (e) {
+      let y = 0
+      if (this.firstOffsetY) {
+        y = e.changedTouches[0].clientY - this.firstOffsetY
+        this.setOffsetY(y)
+      } else {
+        this.firstOffsetY = e.changedTouches[0].clientY
+      }
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    moveEnd (e) {
+      this.setOffsetY(0)
+      this.firstOffsetY = 0
     }
   },
   mounted () {
@@ -181,4 +210,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../assets/style/global.scss';
+.ebook-reader {
+  #mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: transparent; // 透明
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+  }
+}
 </style>

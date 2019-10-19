@@ -1,9 +1,9 @@
 <template>
-  <transition name="fade-slide-right">
+  <transition name="fade">
     <div class="slide-content-wrapper" v-show="menuVisible && (settingVisible === 3)">
       <transition name="slide-right">
         <div class="content" v-if="settingVisible === 3">
-          <div class="content-page-wrapper">
+          <div class="content-page-wrapper" v-if="bookAvailable">
             <div class="content-page">
               <component :is="tab === 1 ? content : bookmark"></component>
             </div>
@@ -13,6 +13,9 @@
               <div class="content-page-tab-item" :class="{'selected': tab === 2}"
               @click="selectTab(2)">{{$t('book.bookmark')}}</div>
             </div>
+          </div>
+          <div class="content-empty" v-else>
+            <loading></loading>
           </div>
         </div>
       </transition>
@@ -24,6 +27,7 @@
 <script>
 import ebookMixin from '../../util/mixin'
 import SlideContent from './EbookSlideContent'
+import Loading from './EbookLoading'
 export default {
   data () {
     return {
@@ -34,7 +38,7 @@ export default {
   },
   mixins: [ebookMixin],
   components: {
-
+    Loading
   },
   methods: {
     selectTab (tab) {
@@ -84,9 +88,10 @@ export default {
           }
         }
       }
-      .empty {
+      .content-empty {
         width: 100%;
         height: 100%;
+        background: white;
         @include center;
         font-size: px2rem(16);
         color: #333;

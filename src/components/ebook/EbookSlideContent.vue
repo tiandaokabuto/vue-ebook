@@ -38,13 +38,18 @@
       </div>
     </div>
     <scroll class="slide-contents-list" :top="156" :bottom="48"
-    ref="scroll">
+    ref="scroll" v-show="!searchVisible">
       <div class="slide-contents-item" v-for="(item, index) in navigation"
       :key="index" @click="displayNavigation(item.href)">
         <span class="slide-contents-item-label"
         :class="{'selected': section === index}"
         :style="contentItemStyle(item)">{{item.label.trim()}}</span>
         <span class="slide-contents-item-page">{{item.page}}</span>
+      </div>
+    </scroll>
+    <scroll class="slide-search-list" :top="66" :bottom="48" ref="scroll" v-show="searchVisible">
+      <div class="slide-search-item" v-for="(item, index) in searchList"
+      :key="index" v-html="item.excerpt" @click="displaySearch(item.cfi, true)">
       </div>
     </scroll>
   </div>
@@ -58,7 +63,8 @@ export default {
   data () {
     return {
       searchVisible: false,
-      searchText: ''
+      searchText: '',
+      searchList: null
     }
   },
   computed: {
@@ -73,8 +79,15 @@ export default {
   methods: {
     displayNavigation (href) {
       this.display(href, () => {
-        console.log(111)
         this.hideTitleAndMenu()
+      })
+    },
+    displaySearch (href, highlight = false) {
+      this.display(href, () => {
+        this.hideTitleAndMenu()
+        if (highlight) {
+          this.currentBook.rendition.annotations.highlight(href)
+        }
       })
     },
     contentItemStyle (item) {
@@ -84,12 +97,26 @@ export default {
     },
     hideSearchPage () {
       this.searchVisible = false
+      this.searchText = ''
+      this.searchList = null
     },
     showSearchPage () {
       this.searchVisible = true
     },
     search () {
-
+      this.doSearch(this.searchText).then(result => {
+        this.searchList = result.map(item => {
+          item.excerpt = item.excerpt.replace(this.searchText, `<span class="slide-search-item-text" style="color: red">${this.searchText}</span>`)
+          return item
+        })
+        this.$refs.searchInput.blur()
+      })
+    },
+    doSearch (q) {
+      return Promise.all(
+        this.currentBook.spine.spineItems.map(
+          item => item.load(this.currentBook.load.bind(this.currentBook)).then(item.find.bind(item, q)).finally(item.unload.bind(item)))
+      ).then(results => Promise.resolve([].concat.apply([], results)))
     }
   }
 }
@@ -229,6 +256,13 @@ export default {
       line-height: px2rem(16);
       padding: px2rem(20) 0;
       box-sizing: border-box;
+      border-bottom: 1px solid #cecece;
+      &:last-child {
+        border-bottom: none;
+      }
+      .slide-search-item-text {
+        font-weight: bold;
+      }
     }
   }
 }
