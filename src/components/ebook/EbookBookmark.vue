@@ -78,12 +78,15 @@ export default {
         this.bookmark = []
       }
       const currentLocation = this.currentBook.rendition.currentLocation()
-      const cfibase = currentLocation.start.cfi.replace(/!.*/, '')
+      const cfibase = currentLocation.start.cfi.replace(/!.*/, '') // cfi前面的公用部分
+      // start后面部分的cfi
       const cfistart = currentLocation.start.cfi.replace(/.*!/, '').replace(/\)$/, '')
+      // end后面部分的cif
       const cfiend = currentLocation.end.cfi.replace(/.*!/, '').replace(/\)$/, '')
+      // 获取范围内的内容
       const cfirange = `${cfibase}!,${cfistart},${cfiend})`
       this.currentBook.getRange(cfirange).then(range => {
-        const text = range.toString().replace(/\s\s/g, '')
+        const text = range.toString().replace(/\s\s/g, '') // 去除空格
         this.bookmark.push({
           cfi: currentLocation.start.cfi,
           text: text
@@ -163,7 +166,7 @@ export default {
   position: absolute;
   top: px2rem(-35);
   left: 0;
-  z-index: 200;
+  z-index: 99;
   width: 100%;
   height: px2rem(35);
   .ebook-bookmark-text-wrapper {
