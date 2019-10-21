@@ -1,7 +1,9 @@
 <template>
   <div class="ebook-reader">
     <div id="reader"></div>
-    <div id="mask" @click="onMaskClick" @touchmove="move" @touchend="moveEnd" ref="mask"></div>
+    <div id="mask" ref="mask"
+    @click="onMaskClick" @touchmove="move" @touchend="moveEnd"
+    @mousedown.left="onMouseEnter" @mousemove.left="onMouseMove" @mouseup.left="onMouseUp"></div>
   </div>
 </template>
 
@@ -36,10 +38,11 @@ export default {
       // this.initGesture()
       this.parseBook()
       this.ebook.ready.then(() => {
-        return this.ebook.locations.generate(750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16)).then(locations => {
-          this.setBookAvailable(true)
-          this.refreshLocation()
-        })
+        return this.ebook.locations.generate(750 * (window.innerWidth / 375) * (getFontSize(this.fileName) / 16))
+          .then(locations => {
+            this.setBookAvailable(true)
+            this.refreshLocation()
+          })
       })
     },
     initRendition () {
@@ -173,6 +176,10 @@ export default {
       this.setFontFamilyVisible(false)
     },
     onMaskClick (e) {
+      if (this.mouseState && (this.mouseState === 2 || this.mouseState === 3)) {
+        // mouseState === 1时，即点击一下，可以继续触发下面事件。
+        return // 直接退出
+      }
       const x = e.offsetX
       const width = window.innerWidth
       if (x > 0 && x < width * 0.3) {
@@ -197,6 +204,38 @@ export default {
     moveEnd (e) {
       this.setOffsetY(0)
       this.firstOffsetY = 0
+    },
+    // 1鼠标进入--2鼠标进入后的移动--3鼠标从移动状态松手--4鼠标还原
+    onMouseEnter (e) { // 解决全屏时无法使用鼠标下拉的问题
+      this.mouseState = 1
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    onMouseMove (e) { // 鼠标移动就会触发
+      if (this.mouseState === 1) { // 已经点击鼠标
+        this.mouseState = 2
+      } else if (this.mouseState === 2) {
+        let y = 0
+        if (this.firstOffsetY) {
+          y = e.clientY - this.firstOffsetY
+          this.setOffsetY(y)
+        } else {
+          this.firstOffsetY = e.clientY
+        }
+      }
+      e.preventDefault()
+      e.stopPropagation()
+    },
+    onMouseUp (e) {
+      if (this.mouseState === 2) {
+        this.setOffsetY(0)
+        this.firstOffsetY = null
+        this.mouseState = 3
+      } else {
+        this.mouseState = 4
+      }
+      e.preventDefault()
+      e.stopPropagation()
     }
   },
   mounted () {

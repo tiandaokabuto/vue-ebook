@@ -43,21 +43,6 @@ export default {
     return {}
   },
   computed: {
-    getSectionName () {
-      // if (this.section) {
-      //   const sectionInfo = this.currentBook.section(this.section)
-      //   if (sectionInfo && sectionInfo.href && this.currentBook && this.currentBook.navigation) {
-      //     console.log(sectionInfo.href)
-      //     console.log(this.currentBook.navigation.get(sectionInfo.href))
-      //     return this.currentBook.navigation.get(sectionInfo.href).label
-      //   } else {
-      //     return ''
-      //   }
-      // } else {
-      //   return ''
-      // }
-      return this.section ? this.navigation[this.section].label : ''
-    },
     getReadTime () {
       return this.$t('book.haveRead').replace('$1', this.getReadTimeByMinute(this.fileName))
     }
