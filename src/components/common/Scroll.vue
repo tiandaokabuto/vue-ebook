@@ -37,7 +37,7 @@ export default {
     }
   },
   methods: {
-    handleScroll (e) {
+    handleScroll (e) { // 捕捉Y轴的偏移量
       const offsetY =
         e.target.scrollTop || window.pageYOffset || document.body.scrollTop
       this.$emit('onScroll', offsetY)

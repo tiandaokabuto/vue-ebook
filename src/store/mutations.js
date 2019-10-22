@@ -55,6 +55,12 @@ export default {
   },
   'SET_IS_BOOKMARK': (state, isBookmark) => {
     state.isBookmark = isBookmark
+  },
+  'SET_HOTSEARCH_OFFSETY': (state, offsetY) => {
+    state.hotSearchOffsetY = offsetY
+  },
+  'SET_FLAPCARD_VISIBLE': (state, visible) => {
+    state.flapCardVisible = visible
   }
   // 'SET_SPEAKING_ICON_BOTTOM': (state, speakingIconBottom) => {
   //   state.speakingIconBottom = speakingIconBottom

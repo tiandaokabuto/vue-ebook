@@ -17,6 +17,8 @@ export default {
   paginate: '',
   pagelist: null,
   offsetY: 0,
-  isBookmark: null
+  isBookmark: null,
+  hotSearchOffsetY: 0,
+  flapCardVisible: false
   // speakingIconBottom: realPx(58)
 }

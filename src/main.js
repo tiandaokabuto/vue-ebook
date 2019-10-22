@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store/store'
 import i18n from './lang/index'
+import './mock'
 import './assets/style/icon.css'
 import './assets/style/global.scss'
 

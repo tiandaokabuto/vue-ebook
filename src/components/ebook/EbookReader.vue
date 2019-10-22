@@ -175,6 +175,7 @@ export default {
       this.setSettingVisible(-1)
       this.setFontFamilyVisible(false)
     },
+    // 手势事件
     onMaskClick (e) {
       if (this.mouseState && (this.mouseState === 2 || this.mouseState === 3)) {
         // mouseState === 1时，即点击一下，可以继续触发下面事件。
@@ -205,6 +206,7 @@ export default {
       this.setOffsetY(0)
       this.firstOffsetY = 0
     },
+    // 鼠标事件
     // 1鼠标进入--2鼠标进入后的移动--3鼠标从移动状态松手--4鼠标还原
     onMouseEnter (e) { // 解决全屏时无法使用鼠标下拉的问题
       this.mouseState = 1

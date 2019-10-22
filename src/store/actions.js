@@ -55,6 +55,12 @@ export default {
   },
   setOffsetY ({ commit }, offsetY) {
     return commit('SET_OFFSETY', offsetY)
+  },
+  setHotSearchOffsetY ({ commit }, offsetY) {
+    return commit('SET_HOTSEARCH_OFFSETY', offsetY)
+  },
+  setFlapCardVisible ({ commit }, visible) {
+    return commit('SET_FLAPCARD_VISIBLE', visible)
   }
   // setSpeakingIconBottom ({ commit }, speakingIconBottom) {
   //   commit('SET_SPEAKING_ICON_BOTTOM', speakingIconBottom)
