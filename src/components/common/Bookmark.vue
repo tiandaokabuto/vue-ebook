@@ -1,10 +1,9 @@
 <template>
-  <div class="ebook-bookmark-icon" :style="style" ref="bookmark"></div>
+  <div class="bookmark" ref="bookmark" :style="style"></div>
 </template>
 
-<script type="text/ecmascript-6">
-import { px2rem } from '../../util/utils'
-
+<script>
+import { px2rem } from '../../utils/utils'
 export default {
   props: {
     width: Number,
@@ -24,7 +23,7 @@ export default {
   },
   methods: {
     refresh () {
-      if (this.height && this.width && this.width > 0 && this.height > 10) { // 刷新宽高
+      if (this.height && this.width) {
         this.$refs.bookmark.style.borderWidth = `${px2rem(this.height - 5)}rem ${px2rem(this.width / 2)}rem ${px2rem(5)}rem ${px2rem(this.width / 2)}rem`
       }
     }
@@ -36,13 +35,11 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-@import '../../assets/style/global.scss';
-  .ebook-bookmark-icon {
+  @import "../../assets/styles/global";
+  .bookmark {
     width: 0;
     height: 0;
-    font-weight: bold;
-    line-height: 0;
-    border-width: px2rem(50) px2rem(10) px2rem(10) px2rem(10);
+    border-width: px2rem(36) px2rem(10) px2rem(10) px2rem(10);
     border-style: solid;
     border-color: white white transparent white;
   }

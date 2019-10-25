@@ -1,20 +1,21 @@
 <template>
   <div class="ebook-footer">
-    <!--<span class="ebook-footer-text">{{this.progress + '%'}}</span>-->
-    <span class="ebook-footer-text">{{this.progress}}%</span>
+    <!--<span class="ebook-footer-text">{{this.paginate}}</span>-->
+    <span class="ebook-footer-text">{{this.paginate}}</span>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import ebookMixin from '../../util/mixin'
+  import { ebookMixin } from '../../utils/mixin'
 
-export default {
-  mixins: [ebookMixin]
-}
+  export default {
+    mixins: [ebookMixin]
+  }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-@import '../../assets/style/global.scss';
+  @import "../../assets/styles/global";
+
   .ebook-footer {
     position: absolute;
     bottom: 0;

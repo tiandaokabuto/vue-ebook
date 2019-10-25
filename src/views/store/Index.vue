@@ -5,19 +5,14 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-
-    }
-  },
-  components: {
-
-  }
-}
+export default {}
 </script>
 
-<style lang="scss" scoped>
-@import '../../assets/style/global.scss';
-
+<style lang="scss" rel="stylesheet/scss" scoped>
+  @import "../../assets/styles/global";
+  .store {
+    width: 100%;
+    height: 100%;
+    background: white;
+  }
 </style>

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { realPx } from '../../util/utils'
+import { realPx } from '@/utils/utils'
 
 export default {
   props: {
@@ -25,19 +25,10 @@ export default {
     ifNoScroll: {
       type: Boolean,
       default: false
-    },
-    initPosition: {
-      type: Object,
-      default: () => {
-        return {
-          x: 0,
-          y: 0
-        }
-      }
     }
   },
   methods: {
-    handleScroll (e) { // 捕捉Y轴的偏移量
+    handleScroll (e) {
       const offsetY =
         e.target.scrollTop || window.pageYOffset || document.body.scrollTop
       this.$emit('onScroll', offsetY)
@@ -45,7 +36,7 @@ export default {
     scrollTo (x, y) {
       this.$refs.scrollWrapper.scrollTo(x, y)
     },
-    refresh () {
+    refresh() {
       if (this.$refs.scrollWrapper) {
         this.$refs.scrollWrapper.style.height =
           window.innerHeight - realPx(this.top) - realPx(this.bottom) + 'px'
@@ -53,32 +44,26 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     this.refresh()
-    this.$nextTick(() => {
-      setTimeout(() => {
-        this.scrollTo(realPx(this.initPosition.x), realPx(this.initPosition.y))
-      }, 1)
-    })
   }
 }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-@import "../../assets/style/global.scss";
+@import '../../assets/styles/global';
 .scroll-wrapper {
   position: relative;
   z-index: 100;
   width: 100%;
-  @include scroll;
   overflow-x: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  &.no-scroll {
-    overflow: hidden;
-  }
   &::-webkit-scrollbar {
     display: none;
+  }
+  &.no-scroll {
+    overflow: hidden;
   }
 }
 </style>

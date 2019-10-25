@@ -16,14 +16,9 @@ import EbookMenu from '../../components/ebook/EbookMenu'
 import EbookBookmark from '../../components/ebook/EbookBookmark'
 import EbookHeader from '../../components/ebook/EbookHeader'
 import EbookFooter from '../../components/ebook/EbookFooter'
-import { getReadTime, saveReadTime } from '../../util/localStorage'
-import ebookMixin from '../../util/mixin'
+import { ebookMixin } from '../../utils/mixin'
+import { getReadTime, saveReadTime } from '../../utils/localstorage'
 export default {
-  data () {
-    return {
-
-    }
-  },
   mixins: [ebookMixin],
   components: {
     EbookReader,
@@ -33,7 +28,31 @@ export default {
     EbookHeader,
     EbookFooter
   },
+  watch: {
+    offsetY(v) {
+      if (!this.menuVisible && this.bookAvailable) {
+        if (v > 0) {
+          this.move(v)
+        } else if (v === 0) {
+          this.restore()
+        }
+      }
+    }
+  },
   methods: {
+    // 下拉松开top重置
+    restore () {
+      this.$refs.ebook.style.top = 0
+      this.$refs.ebook.style.transition = 'all .2s linear'
+      setTimeout(() => {
+        this.$refs.ebook.style.transition = ''
+      }, 200)
+    },
+    // 下拉设置top值
+    move (v) {
+      this.$refs.ebook.style.top = v + 'px'
+    },
+    //  阅读时间记录功能
     startLoopReadTime () {
       let readTime = getReadTime(this.fileName)
       if (!readTime) {
@@ -45,16 +64,6 @@ export default {
           saveReadTime(this.fileName, readTime)
         }
       }, 1000)
-    },
-    move (v) {
-      this.$refs.ebook.style.top = v + 'px'
-    },
-    restore () {
-      this.$refs.ebook.style.top = 0
-      this.$refs.ebook.style.transition = 'all .2s linear'
-      setTimeout(() => {
-        this.$refs.ebook.style.transition = ''
-      })
     }
   },
   mounted () {
@@ -64,23 +73,12 @@ export default {
     if (this.task) {
       clearInterval(this.task)
     }
-  },
-  watch: {
-    offsetY (v) {
-      if (!this.menuVisible && this.bookAvailable) {
-        if (v > 0) {
-          this.move(v)
-        } else if (v === 0) {
-          this.restore()
-        }
-      }
-    }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-@import '../../assets/style/global.scss';
+<style lang="scss" rel="stylesheet/scss" scoped>
+@import "../../assets/styles/global.scss";
 .ebook {
   position: absolute;
   top: 0;

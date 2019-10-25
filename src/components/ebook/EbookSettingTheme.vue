@@ -1,6 +1,6 @@
 <template>
   <transition name="slide-up">
-    <div class="setting-wrapper" v-show="(settingVisible === 1) && menuVisible">
+    <div class="setting-wrapper" v-show="menuVisible && settingVisible === 1">
       <div class="setting-theme">
         <div
           class="setting-theme-item"
@@ -11,6 +11,7 @@
           <div
             class="preview"
             :style="{background: item.style.body.background}"
+            :class="{'selected': item.name === defaultTheme}"
           ></div>
           <div class="text" :class="{'selected': item.name === defaultTheme}">{{item.alias}}</div>
         </div>
@@ -20,37 +21,34 @@
 </template>
 
 <script>
-import ebookMixin from '../../util/mixin'
-import { themeList } from '../../util/book'
-import { saveTheme } from '../../util/localStorage'
+import { ebookMixin } from '../../utils/mixin'
+import { saveTheme } from '../../utils/localstorage'
 export default {
-  computed: {
-    themeList () { return themeList(this) }
-  },
   mixins: [ebookMixin],
   methods: {
     setTheme (index) {
       const theme = this.themeList[index]
       this.setDefaultTheme(theme.name).then(() => {
         this.currentBook.rendition.themes.select(this.defaultTheme)
-        saveTheme(this.fileName, theme.name)
+        this.initGlobalStyle()
       })
+      saveTheme(this.fileName, theme.name)
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-@import "../../assets/style/global.scss";
-.setting-wrapper {
+<style lang="scss" rel="stylesheet/scss" scoped>
+@import "../../assets/styles/global";
+  .setting-wrapper {
     position: absolute;
     bottom: px2rem(48);
     left: 0;
-    z-index: 101;
+    z-index: 160;
     width: 100%;
     height: px2rem(90);
     background: white;
-    box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0, 0.15);
+    box-shadow: 0 px2rem(-8) px2rem(8) rgba(0, 0, 0, .15);
     .setting-theme {
       height: 100%;
       display: flex;
@@ -64,6 +62,9 @@ export default {
           flex: 1;
           border: px2rem(1) solid #ccc;
           box-sizing: border-box;
+          &.selected {
+            box-shadow: 0 px2rem(4) px2rem(6) rgba(0,0,0,.1)
+          }
         }
         .text {
           flex: 0 0 px2rem(20);

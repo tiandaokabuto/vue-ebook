@@ -5,15 +5,15 @@
 </template>
 
 <script type="text/ecmascript-6">
-import ebookMixin from '../../util/mixin'
+  import { ebookMixin } from '../../utils/mixin'
 
-export default {
-  mixins: [ebookMixin]
-}
+  export default {
+    mixins: [ebookMixin]
+  }
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-@import '../../assets/style/global.scss';
+  @import "../../assets/styles/global";
   .ebook-header {
     position: absolute;
     top: 0;

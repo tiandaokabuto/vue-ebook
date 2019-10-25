@@ -1,9 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Ebook from './views/ebook/Index'
-import EbookReader from './components/ebook/EbookReader'
-import Store from './views/store/Index'
-import StoreHome from './views/store/StoreHome'
 
 Vue.use(Router)
 
@@ -11,26 +7,46 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/ebook'
+      redirect: '/store'
     },
     {
       path: '/ebook',
-      component: Ebook,
+      component: () => import('./views/ebook/index.vue'),
       children: [
         {
           path: ':fileName',
-          component: EbookReader
+          component: () => import('./components/ebook/EbookReader.vue')
         }
       ]
     },
     {
       path: '/store',
-      component: Store,
-      redirect: '/store/home',
+      component: () => import('./views/store/index.vue'),
+      redirect: '/store/shelf',
       children: [
         {
           path: 'home',
-          component: StoreHome
+          component: () => import('./views/store/StoreHome.vue')
+        },
+        {
+          path: 'list',
+          component: () => import('./views/store/StoreList.vue')
+        },
+        {
+          path: 'detail',
+          component: () => import('./views/store/StoreDetail.vue')
+        },
+        {
+          path: 'category',
+          component: () => import('./views/store/StoreCategory.vue')
+        },
+        {
+          path: 'shelf',
+          component: () => import('./views/store/StoreShelf.vue')
+        },
+        {
+          path: 'speaking',
+          component: () => import('./views/store/StoreSpeaking.vue')
         }
       ]
     }

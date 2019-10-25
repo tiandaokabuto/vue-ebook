@@ -45,10 +45,10 @@
 </template>
 
 <script>
-import homemixin from '../../util/homemixin'
-import { flapCardList, categoryText } from '../../util/store'
+import { storeHomeMixin } from '../../utils/mixin'
+import { flapCardList, categoryText } from '../../utils/store'
 export default {
-  mixins: [homemixin],
+  mixins: [storeHomeMixin],
   props: {
     data: Object
   },
@@ -220,8 +220,8 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/style/flapCard.scss";
-  @import '../../assets/style/global.scss';
+  @import "../../assets/styles/flapCard";
+  @import "../../assets/styles/global";
   .flap-card-wrapper {
     z-index: 1000;
     width: 100%;
@@ -275,12 +275,12 @@ export default {
           }
           .flap-card-semi-circle-left {
             border-radius: px2rem(24) 0 0 px2rem(24);
-            background-position: center right; // 中+右
+            background-position: center right;
             transform-origin: right;
           }
           .flap-card-semi-circle-right {
             border-radius: 0 px2rem(24) px2rem(24) 0;
-            background-position: center left; // 中+左
+            background-position: center left;
             transform-origin: left;
           }
         }
@@ -301,7 +301,7 @@ export default {
         }
       }
     }
-    .book-card {
+.book-card {
       position: relative;
       width: 65%;
       max-width: px2rem(400);

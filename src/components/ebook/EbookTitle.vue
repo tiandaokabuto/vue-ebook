@@ -1,49 +1,44 @@
 <template>
-  <div class="page">
-    <transition name="slide-down">
-      <div class="title-wrapper" v-show="menuVisible">
-        <div class="left">
-          <span class="icon-back" @click="back"></span>
-        </div>
-        <div class="right">
-          <div class="icon-wrapper">
-            <span class="icon-shelf"></span>
-          </div>
-          <div class="icon-wrapper">
-            <span class="icon-cart"></span>
-          </div>
-          <div class="icon-wrapper">
-            <span class="icon-more"></span>
-          </div>
-        </div>
+<transition name="slide-down">
+  <div class="title-wrapper" v-show="menuVisible">
+    <div class="left">
+      <span class="icon-back" @click="back"></span>
+    </div>
+    <div class="right">
+      <div class="icon-wrapper">
+        <span class="icon-shelf"></span>
       </div>
-    </transition>
+      <div class="icon-wrapper">
+        <span class="icon-cart"></span>
+      </div>
+      <div class="icon-wrapper">
+        <span class="icon-more"></span>
+      </div>
+    </div>
   </div>
+</transition>
 </template>
 
 <script>
-import ebookMixin from '../../util/mixin'
+import { ebookMixin } from '../../utils/mixin'
+
 export default {
-  data () {
-    return {}
-  },
   mixins: [ebookMixin],
-  components: {},
   methods: {
     back () {
-      alert('back')
+      this.$router.go(-1)
     }
   }
 }
 </script>
 
-<style lang='scss' scoped>
-@import '../../assets/style/global.scss';
-.title-wrapper {
+<style lang="scss" rel="stylesheet/scss" scoped>
+@import "../../assets/styles/global.scss";
+  .title-wrapper {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 101;
+    z-index: 200;
     display: flex;
     width: 100%;
     height: px2rem(48);
@@ -53,7 +48,7 @@ export default {
     .left {
       flex: 0 0 px2rem(60);
       @include left;
-      margin-left: px2rem(10);
+      margin-left: px2rem(15)
     }
     .right {
       flex: 1;
@@ -62,8 +57,11 @@ export default {
       .icon-wrapper {
         flex: 0 0 px2rem(40);
         @include center;
-        .icon-shelf, .icon-more {
-          font-size: px2rem(21);
+        .icon-shelf {
+          font-size: px2rem(22);
+        }
+        .icon-cart {
+          font-size: px2rem(22);
         }
       }
     }
