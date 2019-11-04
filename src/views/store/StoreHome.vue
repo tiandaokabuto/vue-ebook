@@ -7,16 +7,15 @@
         <img class="banner-img" :src="banner">
       </div>
       <guess-you-like :data="guessYouLike"></guess-you-like>
-      <recommend class="recommend" :data="recommend"></recommend>
+      <recommend :data="recommend"></recommend>
       <featured
-      class="featured"
       :titleText="$t('home.featured')"
       :btnText="$t('home.seeAll')"
       :data="featured"></featured>
-      <div class="category-list-wapper" v-for="(item, index) in categoryList" :key="index">
+      <div class="category-list-wrapper" v-for="(item, index) in categoryList" :key="index">
         <category-book class="category-book" :data="item"></category-book>
       </div>
-      <category class="category" :data="categorys"></category>
+      <category :data="categorys"></category>
     </scroll>
   </div>
 </template>
@@ -100,18 +99,18 @@ export default {
         background-repeat: no-repeat;
         background-size: 100% 100%;
       }
-      .recommend {
+    }
+    .recommend {
         margin-top: px2rem(20);
       }
-      .featured {
-        margin-top: px2rem(20);
-      }
-      .category-list-wrapper {
-        margin-top: px2rem(20);
-      }
-      .category {
-        margin-top: px2rem(20);
-      }
+    .featured {
+      margin-top: px2rem(20);
+    }
+    .category-list-wrapper {
+      margin-top: px2rem(20);
+    }
+    .category {
+      margin-top: px2rem(20);
     }
   }
 </style>

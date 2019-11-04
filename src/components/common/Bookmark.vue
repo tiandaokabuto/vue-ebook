@@ -22,7 +22,7 @@ export default {
     }
   },
   methods: {
-    refresh () {
+    refresh () { // 给父组件调用，刷新书签样式，改变大小
       if (this.height && this.width) {
         this.$refs.bookmark.style.borderWidth = `${px2rem(this.height - 5)}rem ${px2rem(this.width / 2)}rem ${px2rem(5)}rem ${px2rem(this.width / 2)}rem`
       }

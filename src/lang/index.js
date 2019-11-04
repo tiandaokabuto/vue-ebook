@@ -18,8 +18,8 @@ if (!locale) {
 }
 
 const i18n = new VueI18n({
-  locale,
-  messages
+  locale, // 设置语言
+  messages // 语言包
 })
 
 export default i18n

@@ -101,6 +101,7 @@ export const storeHomeMixin = {
       'setFlapCardVisible'
     ]),
     showBookDetail(book) {
+      this.setFlapCardVisible(false)
       gotoBookDetail(this, book)
     }
   }
@@ -179,15 +180,16 @@ export const ebookMixin = {
     },
     refreshLocation() {
       const currentLocation = this.currentBook.rendition.currentLocation()
+      console.log(currentLocation)
       if (currentLocation && currentLocation.start) {
-        const startCfi = currentLocation.start.cfi
-        const progress = this.currentBook.locations.percentageFromCfi(startCfi)
+        const startCfi = currentLocation.start.cfi // 开始cfi
+        const progress = this.currentBook.locations.percentageFromCfi(startCfi) // 获得进度
         this.setProgress(Math.floor(progress * 100))
-        this.setSection(currentLocation.start.index)
-        saveLocation(this.fileName, startCfi)
-        const bookmark = getBookmark(this.fileName)
+        this.setSection(currentLocation.start.index) // 获取起始章节
+        saveLocation(this.fileName, startCfi) // 保存
+        const bookmark = getBookmark(this.fileName) // 获得书签
         if (bookmark) {
-          if (bookmark.some(item => item.cfi === startCfi)) {
+          if (bookmark.some(item => item.cfi === startCfi)) { // 书签的cfi跟当前页面开始的cfi一致
             this.setIsBookmark(true)
           } else {
             this.setIsBookmark(false)
@@ -196,10 +198,10 @@ export const ebookMixin = {
           this.setIsBookmark(false)
         }
         if (this.pagelist) {
-          const totalPage = this.pagelist.length
-          const currentPage = currentLocation.start.location
+          const totalPage = this.pagelist.length // 页数
+          const currentPage = currentLocation.start.location // 当前页数
           if (currentPage && currentPage > 0) {
-            this.setPaginate(currentPage + '/' + totalPage)
+            this.setPaginate(currentPage + '/' + totalPage) // 不是第0页，显示页码
           } else {
             this.setPaginate('')
           }
@@ -210,12 +212,12 @@ export const ebookMixin = {
     },
     display(target, cb) {
       if (target) {
-        this.currentBook.rendition.display(target).then(() => {
+        this.currentBook.rendition.display(target).then(() => { // 如果有阅读记录，就渲染到那一页
           this.refreshLocation()
           if (cb) cb()
         })
       } else {
-        this.currentBook.rendition.display().then(() => {
+        this.currentBook.rendition.display().then(() => { // 没有阅读记录，正常渲染
           this.refreshLocation()
           if (cb) cb()
         })

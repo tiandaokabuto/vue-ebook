@@ -8,8 +8,11 @@
             :top="42"
             @onScroll="onScroll"
             ref="scroll">
-      <featured :data="value" :titleText="titleText ? titleText : getCategoryText(key)" :btnText="''" v-for="(value, key, index) in list"
-                :key="index"></featured>
+      <featured :data="value"
+      :titleText="titleText ? titleText : getCategoryText(key)"
+      :btnText="''"
+      v-for="(value, key, index) in list"
+      :key="index"></featured>
     </scroll>
   </div>
 </template>

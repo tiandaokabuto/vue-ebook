@@ -90,18 +90,18 @@
       },
       // 重复代码重构  --> 阅读器渲染初始化过程
       initRendition () {
-        this.rendition = this.book.renderTo('read', {
+        this.rendition = this.book.renderTo('read', { // 获得rendition对象
           width: innerWidth,
           height: innerHeight
         })
         const location = getLocation(this.fileName)
-          this.display(location, () => {
-            this.initTheme()
-            this.initFontSize()
-            this.initFontFamily()
-            this.initGlobalStyle()
+        this.display(location, () => { // 执行渲染
+          this.initTheme()
+          this.initFontSize()
+          this.initFontFamily()
+          this.initGlobalStyle()
         })
-        this.rendition.hooks.content.register(contents => {
+        this.rendition.hooks.content.register(contents => { // 字体样式添加
           Promise.all([
             contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/daysOne.css`),
             contents.addStylesheet(`${process.env.VUE_APP_RES_URL}/fonts/cabin.css`),
@@ -134,13 +134,15 @@
       parseBook () {
         this.book.loaded.cover.then(cover => {
           this.book.archive.createUrl(cover).then(url => {
-            this.setCover(url)
+            this.setCover(url) // 封面
           })
           this.book.loaded.metadata.then(metadata => {
-            this.setMetadata(metadata)
+            this.setMetadata(metadata) // 作者
           })
           this.book.loaded.navigation.then(nav => {
-            const navItem = flatten(nav.toc)
+            console.log(nav.toc)
+            const navItem = flatten(nav.toc) // 树状结构的目录转换成一维数组结构的目录
+            console.log(navItem)
             function find(item, level = 0) {
               return !item.parent ? level : find(navItem.filter(parentItem => parentItem.id === item.parent)[0], ++level)
             }
@@ -189,6 +191,7 @@
             this.refreshLocation()
           })
         })
+        console.log(this.book)
       },
       // 书签蒙板点击
       onMaskClick (e) {
@@ -270,6 +273,7 @@
       }
     },
     mounted () {
+      console.log(this.$route.params.fileName)
       const books = this.$route.params.fileName.split('|')
       const fileName = books[1]
       getLocalForage(fileName, (err, blob) => {

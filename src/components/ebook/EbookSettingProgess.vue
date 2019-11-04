@@ -55,6 +55,7 @@ export default {
     },
     // 展示当前进度所在的页面
     displayProgress () {
+      // 获得对应百分比进度的cfi
       const cfi = this.currentBook.locations.cfiFromPercentage(this.progress / 100)
       this.display(cfi)
     },

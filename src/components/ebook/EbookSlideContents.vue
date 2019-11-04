@@ -132,12 +132,12 @@ export default {
         })
       }
     }
-  },
-  mounted () {
-    this.doSearch('added').then(list => {
-      this.searchList = list
-    })
   }
+  // mounted () {
+  //   this.doSearch('added').then(list => {
+  //     this.searchList = list
+  //   })
+  // }
 }
 </script>
 
