@@ -140,9 +140,7 @@
             this.setMetadata(metadata) // 作者
           })
           this.book.loaded.navigation.then(nav => {
-            console.log(nav.toc)
             const navItem = flatten(nav.toc) // 树状结构的目录转换成一维数组结构的目录
-            console.log(navItem)
             function find(item, level = 0) {
               return !item.parent ? level : find(navItem.filter(parentItem => parentItem.id === item.parent)[0], ++level)
             }
@@ -273,7 +271,6 @@
       }
     },
     mounted () {
-      console.log(this.$route.params.fileName)
       const books = this.$route.params.fileName.split('|')
       const fileName = books[1]
       getLocalForage(fileName, (err, blob) => {

@@ -19,6 +19,10 @@ import EbookFooter from '../../components/ebook/EbookFooter'
 import { ebookMixin } from '../../utils/mixin'
 import { getReadTime, saveReadTime } from '../../utils/localstorage'
 export default {
+  data () {
+    return {
+    }
+  },
   mixins: [ebookMixin],
   components: {
     EbookReader,

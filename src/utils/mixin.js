@@ -180,7 +180,6 @@ export const ebookMixin = {
     },
     refreshLocation() {
       const currentLocation = this.currentBook.rendition.currentLocation()
-      console.log(currentLocation)
       if (currentLocation && currentLocation.start) {
         const startCfi = currentLocation.start.cfi // 开始cfi
         const progress = this.currentBook.locations.percentageFromCfi(startCfi) // 获得进度

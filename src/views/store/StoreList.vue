@@ -68,7 +68,7 @@
         }
       },
       getList() {
-        list().then(response => {
+        list().then(response => { // axios获得list
           this.list = response.data.data
           this.total = response.data.total
           const category = this.$route.query.category
@@ -89,7 +89,7 @@
     },
     created() {
       this.getList()
-      this.titleText = this.$route.query.categoryText
+      this.titleText = this.$route.query.categoryText // 获得参数
     }
   }
 </script>

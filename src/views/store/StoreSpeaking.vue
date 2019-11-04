@@ -2,15 +2,15 @@
   <div class="book-speaking">
     <detail-title @back="back" ref="title"></detail-title>
     <scroll class="content-wrapper"
-            :top="42"
-            :bottom="scrollBottom"
-            :ifNoScroll="disableScroll"
-            @onScroll="onScroll"
-            ref="scroll">
+    :top="42"
+    :bottom="scrollBottom"
+    :ifNoScroll="disableScroll"
+    @onScroll="onScroll"
+    ref="scroll">
       <book-info :cover="cover"
-                 :title="title"
-                 :author="author"
-                 :desc="desc"></book-info>
+      :title="title"
+      :author="author"
+      :desc="desc"></book-info>
       <div class="book-speak-title-wrapper">
         <div class="icon-speak-wrapper">
           <span class="icon-speak"></span>
