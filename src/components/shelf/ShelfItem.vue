@@ -24,7 +24,7 @@ export default {
     data: Object
   },
   computed: {
-    item () {
+    item () { // data为1是书本，为2是分类，为3是添加图书按钮
       return this.data.type === 1
       ? this.book
       : (this.data.type === 2 ? this.category : this.add)

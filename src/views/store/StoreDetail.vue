@@ -63,7 +63,6 @@
     </scroll>
     <div class="bottom-wrapper">
       <div class="bottom-btn" @click.stop.prevent="readBook()">{{$t('detail.read')}}</div>
-      <!-- <div class="bottom-btn" @click.stop.prevent="trialListening()">{{$t('detail.listen')}}</div> -->
       <div class="bottom-btn" @click.stop.prevent="addOrRemoveShelf()">
         <span class="icon-check" v-if="inBookShelf"></span>
         {{inBookShelf ? $t('detail.isAddedToShelf') : $t('detail.addOrRemoveShelf')}}
@@ -162,26 +161,6 @@
       readBook() {
         this.$router.push({
           path: `/ebook/${this.categoryText}|${this.fileName}`
-        })
-      },
-      trialListening() {
-        getLocalForage(this.bookItem.fileName, (err, blob) => {
-          if (!err && blob && blob instanceof Blob) {
-            this.$router.push({
-              path: '/store/speaking',
-              query: {
-                fileName: this.bookItem.fileName
-              }
-            })
-          } else {
-            this.$router.push({
-              path: '/store/speaking',
-              query: {
-                fileName: this.bookItem.fileName,
-                opf: this.opf
-              }
-            })
-          }
         })
       },
       read(item) {
