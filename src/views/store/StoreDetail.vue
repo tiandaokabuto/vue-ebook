@@ -80,11 +80,14 @@
   import { detail } from '../../api/store'
   import { px2rem, realPx } from '../../utils/utils'
   import Epub from 'epubjs'
-  import { getLocalForage } from '../../utils/localForage'
+  import { removeFromBookShelf, addToShelf } from '../../utils/store'
+  import { getBookShelf, saveBookShelf } from '../../utils/localstorage'
+  import { storeShelfMixin } from '../../utils/mixin'
 
   global.ePub = Epub
 
   export default {
+    mixins: [storeShelfMixin],
     components: {
       DetailTitle,
       Scroll,
@@ -122,10 +125,10 @@
         return this.metadata ? this.metadata.creator : ''
       },
       inBookShelf() {
-        if (this.bookItem && this.bookShelf) {
+        if (this.bookItem && this.shelfList) {
           const flatShelf = (function flatten(arr) {
             return [].concat(...arr.map(v => v.itemList ? [v, ...flatten(v.itemList)] : v))
-          })(this.bookShelf).filter(item => item.type === 1)
+          })(this.shelfList).filter(item => item.type === 1)
           const book = flatShelf.filter(item => item.fileName === this.bookItem.fileName)
           return book && book.length > 0
         } else {
@@ -153,6 +156,14 @@
     },
     methods: {
       addOrRemoveShelf() {
+        if (this.inBookShelf) {
+          this.setShelfList(removeFromBookShelf(this.bookItem)).then(() => {
+            saveBookShelf(this.shelfList)
+          })
+        } else {
+          addToShelf(this.bookItem)
+          this.setShelfList(getBookShelf())
+        }
       },
       showToast(text) {
         this.toastText = text
@@ -196,7 +207,6 @@
         this.book.loaded.navigation.then(nav => {
           this.navigation = nav
           if (this.navigation.toc && this.navigation.toc.length > 1) {
-            console.log(this.navigation)
             // const candisplay = this.display(this.navigation.toc[1].href)
             setTimeout(() => {
               this.display(this.navigation.toc[1].href)
@@ -224,7 +234,6 @@
           detail({
             fileName: this.fileName
           }).then(response => {
-            console.log(response)
             if (response.status === 200 && response.data.error_code === 0 && response.data.data) {
               const data = response.data.data
               this.bookItem = data
@@ -234,7 +243,6 @@
                 rootFile = rootFile.substring(1, rootFile.length)
               }
               this.opf = `${process.env.VUE_APP_EPUB_OPF_URL}/${this.fileName}/${rootFile}`
-              console.log(this.opf)
               this.parseBook(this.opf)
             } else {
               this.showToast(response.data.msg)
@@ -253,13 +261,10 @@
               height: window.innerHeight,
               method: 'default'
             })
-            console.log(this.rendition)
           }
           if (!location) {
-            console.log(location)
             return this.rendition.display()
           } else {
-            console.log(location)
             return this.rendition.display(location)
           }
         }
@@ -274,6 +279,9 @@
     },
     mounted() {
       this.init()
+      if (this.shelfList) {
+        this.getShelfList()
+      }
     }
   }
 </script>

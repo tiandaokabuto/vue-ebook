@@ -189,7 +189,6 @@
             this.refreshLocation()
           })
         })
-        console.log(this.book)
       },
       // 书签蒙板点击
       onMaskClick (e) {
@@ -280,7 +279,8 @@
           })
         } else {
           this.setFileName(books.join('/')).then(() => {
-            const url = process.env.VUE_APP_RES_URL + '/epub/' + this.fileName + '.epub'
+            // const url = process.env.VUE_APP_RES_URL + '/epub/' + this.fileName + '.epub'
+            const url = process.env.VUE_APP_EPUB_URL + this.fileName + '.epub'
             this.initEpub(url)
           })
         }
