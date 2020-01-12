@@ -45,6 +45,10 @@ export default new Router({
           component: () => import('./views/store/StoreShelf.vue')
         }
       ]
+    },
+    {
+      path: '/flap',
+      component: () => import('./components/flapCard.vue')
     }
   ]
 })

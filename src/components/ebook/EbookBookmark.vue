@@ -26,10 +26,10 @@
     },
     computed: {
       height () {
-        return realPx(35)
+        return realPx(35) // 书签吸顶高度
       },
       threshold () {
-        return realPx(55)
+        return realPx(55) // 记录书签高度
       },
       fixedStyle () {
         return {
@@ -40,7 +40,7 @@
       }
     },
     watch: {
-      offsetY (v) {
+      offsetY (v) { // 监听书签位置移动
         if (!this.bookAvailable || this.menuVisible || this.settingVisible >= 0) {
           return
         }
@@ -73,7 +73,7 @@
     },
     methods: {
       // 书签状态封装
-      // 状态1：未超过书签的高度
+      // 状态1：未超过书签的高度（书签移动）
       beforeHeight () {
         if (this.isBookmark) {
           this.text = this.$t('book.pulldownDeleteMark')
@@ -85,7 +85,7 @@
           this.isFiexed = false
         }
       },
-      //  状态2：未到达临界状态
+      //  状态2：未到达临界高度（书签吸顶）
       beforeThreshold (v) {
         this.$refs.bookmark.style.top = `${-v}px`
         this.beforeHeight()
@@ -94,7 +94,7 @@
           iconDown.style.transform = 'rotate(0deg)'
         }
       },
-      // 状态3： 超越临界状态
+      // 状态3： 超越临界高度（书签颜色改变，添加成功）
       afterThreshold (v) {
         this.$refs.bookmark.style.top = `${-v}px`
         if (this.isBookmark) {
@@ -104,14 +104,14 @@
         } else {
           this.text = this.$t('book.releaseAddMark')
           this.color = RED
-        this.isFiexed = true
+          this.isFiexed = true
         }
         const iconDown = this.$refs.iconDown
         if (iconDown.style.transform === '' || iconDown.style.transform === 'rotate(0deg)') {
           iconDown.style.transform = 'rotate(180deg)'
         }
       },
-      // 状态4：书签归位
+      // 状态4：书签归位（松手）
       restore () {
         setTimeout(() => {
           this.$refs.bookmark.style.top = `${-this.height}px`

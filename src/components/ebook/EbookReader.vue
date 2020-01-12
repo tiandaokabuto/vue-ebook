@@ -111,25 +111,25 @@
         })
       },
       // 重复代码重构  --> 手势操作初始化
-      initGesture () {
-        this.rendition.on('touchstart', event => {
-          this.touchStartX = event.changedTouches[0].clientX
-          this.touchStartTime = event.timeStamp
-        })
-        this.rendition.on('touchend', event => {
-          const offsetX = event.changedTouches[0].clientX - this.touchStartX
-          const time = event.timeStamp - this.touchStartTime
-          if (time < 500 && offsetX > 40) {
-            this.prevPage()
-          } else if (time < 500 && offsetX < -40) {
-            this.nextPage()
-          } else {
-            this.toggleTitleAndMenu()
-          }
-          // event.preventDefault()
-          event.stopPropagation()
-        })
-      },
+      // initGesture () {
+      //   this.rendition.on('touchstart', event => {
+      //     this.touchStartX = event.changedTouches[0].clientX
+      //     this.touchStartTime = event.timeStamp
+      //   })
+      //   this.rendition.on('touchend', event => {
+      //     const offsetX = event.changedTouches[0].clientX - this.touchStartX
+      //     const time = event.timeStamp - this.touchStartTime
+      //     if (time < 500 && offsetX > 40) {
+      //       this.prevPage()
+      //     } else if (time < 500 && offsetX < -40) {
+      //       this.nextPage()
+      //     } else {
+      //       this.toggleTitleAndMenu()
+      //     }
+      //     // event.preventDefault()
+      //     event.stopPropagation()
+      //   })
+      // },
       // 获取书籍封面 标题 作者信息
       parseBook () {
         this.book.loaded.cover.then(cover => {
@@ -222,23 +222,25 @@
         this.setOffsetY(0)
         this.firstOffsetY = null
       },
-      // 鼠标事件流程
+      // 鼠标事件流程（前面做的是手势下拉，这里做的是适配PC端的鼠标下拉）
       // 1--  鼠标进入
       // 2--  鼠标进入后的移动
       // 3--  鼠标从移动状态松手
       // 4--  鼠标还原
       // 鼠标左键点击
       onMouseEnter (e) {
+        console.log('click')
         this.mouseState = 1
         this.mouseStartTime = e.timeStamp
-        e.preventDefault()
-        e.stopPropagation()
+        // e.preventDefault()
+        // e.stopPropagation()
       },
       // 鼠标左键下拉
       onMouseMove (e) {
         if (this.mouseState === 1) {
           this.mouseState = 2
         } else if (this.mouseState === 2) {
+          // 设置偏移量
           let offsetY = 0
           if (this.firstOffsetY) {
             offsetY = e.clientY - this.firstOffsetY
@@ -247,26 +249,27 @@
             this.firstOffsetY = e.clientY
           }
         }
-        e.preventDefault()
-        e.stopPropagation()
+        // e.preventDefault()
+        // e.stopPropagation()
       },
       // 鼠标左键下拉松开
       onMouseEnd (e) {
+        console.log('end')
         if (this.mouseState === 2) {
           this.setOffsetY(0)
           this.firstOffsetY = null
-          this.mouseState = 3
+          this.mouseState = 3 // 改变状态，否则会一直触发mouse === 2的操作
           e.preventDefault()
           e.stopPropagation()
         } else {
-          this.mouseState = 4
+          this.mouseState = 4 // 直接点一下，不做任何操作
         }
         const time = e.timeStamp - this.mouseStartTime
         if (time < 100) {
           this.mouseState = 4
         }
-        e.preventDefault()
-        e.stopPropagation()
+        // e.preventDefault()
+        // e.stopPropagation()
       }
     },
     mounted () {
@@ -279,8 +282,8 @@
           })
         } else {
           this.setFileName(books.join('/')).then(() => {
-            // const url = process.env.VUE_APP_RES_URL + '/epub/' + this.fileName + '.epub'
-            const url = process.env.VUE_APP_EPUB_URL + this.fileName + '.epub'
+            const url = process.env.VUE_APP_RES_URL + '/epub/' + this.fileName + '.epub'
+            // const url = process.env.VUE_APP_EPUB_URL + this.fileName + '.epub'
             this.initEpub(url)
           })
         }
